@@ -1,22 +1,9 @@
 package ru.job4j.poly;
 
-public class Bus implements Transport {
-
-    private int numOfPas;
-    private double price;
+public class Bus implements Vehicle {
 
     @Override
-    public void go() {
-        System.out.println("Go!");
-    }
-
-    @Override
-    public void passengers(int numOfPas) {
-       this.numOfPas += numOfPas;
-    }
-
-    @Override
-    public double fill(int volume) {
-        return price * volume;
+    public void move() {
+        System.out.println(getClass().getSimpleName() + ": едет по трассе");
     }
 }
