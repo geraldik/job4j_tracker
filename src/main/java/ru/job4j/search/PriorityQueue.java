@@ -7,7 +7,6 @@ public class PriorityQueue {
 
     public void put(Task task) {
         int index = 0;
-        if (!tasks.isEmpty()) {
             for (Task element : tasks) {
                 if (task.getPriority() > element.getPriority()) {
                     index += 1;
@@ -15,7 +14,6 @@ public class PriorityQueue {
                     break;
                 }
             }
-        }
         this.tasks.add(index, task);
     }
 
