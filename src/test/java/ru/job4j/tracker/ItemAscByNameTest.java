@@ -5,8 +5,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.Assert.*;
+//import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 
 public class ItemAscByNameTest {
 
@@ -23,6 +25,6 @@ public class ItemAscByNameTest {
                 new Item(2, "Identified error"),
                 new Item(1, "Something wrong")
         );
-        assertEquals(items, expected);
+        assertThat(items, is(expected));
     }
 }
