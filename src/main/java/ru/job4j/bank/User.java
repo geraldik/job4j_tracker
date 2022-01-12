@@ -2,10 +2,26 @@ package ru.job4j.bank;
 
 import java.util.Objects;
 
+/**
+ * Класс реализует модель данных пользователя банковской системы.
+ * @author VLAD KROTOV
+ * @version 1.0
+ */
 public class User {
+    /**
+     * Паспортные данные пользователя.
+     */
     private String passport;
+    /**
+     * Имя пользователя.
+     */
     private String username;
 
+    /**
+     * Конструктор создающий пользователя с паспортными данными и именем.
+     * @param passport паспортные данные пользователя
+     * @param username имя пользователя
+     */
     public User(String passport, String username) {
         this.passport = passport;
         this.username = username;
