@@ -1,10 +1,6 @@
 package ru.job4j.collection;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.LinkedHashSet;
-import java.util.Set;
-import java.util.Comparator;
+import java.util.*;
 
 public class Departments {
 
@@ -28,6 +24,6 @@ public class Departments {
     }
 
     public static void sortDesc(List<String> orgs) {
-        orgs.sort(new DepDescComp().thenComparing(Comparator.naturalOrder()));
+         orgs.sort(new DepDescComp());
     }
 }
