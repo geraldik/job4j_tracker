@@ -3,11 +3,13 @@ package ru.job4j.stream;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertEquals;
 
 public class SchoolTest {
     @Test
@@ -63,5 +65,26 @@ public class SchoolTest {
         expected.add(new Student(30, "Surname3"));
         expected.add(new Student(40, "Surname4"));
         assertThat(rsl, is(expected));
+    }
+
+    @Test
+    public void whenTestMethodCollectSortWithoutDuplicate() {
+        Address first = new Address("City1", "Street1", 1, 1);
+        Address second = new Address("City2", "Street2", 2, 2);
+        Address third = new Address("City3", "Street3", 3, 3);
+        Address fourth = new Address("City1", "Street1", 1, 1);
+        Address fifth = new Address("City2", "Street2", 2, 2);
+        Address seventh = new Address("City3", "Street3", 3, 3);
+        List<Profile> profiles = Arrays.asList(
+                new Profile(second),
+                new Profile(fourth),
+                new Profile(fifth),
+                new Profile(first),
+                new Profile(seventh),
+                new Profile(third)
+        );
+        List<Address> result = Profiles.collectSortWithoutDuplicate(profiles);
+        List<Address> expected = Arrays.asList(first, second, third);
+        assertEquals(expected, result);
     }
 }
