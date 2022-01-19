@@ -12,7 +12,7 @@ public class DepartmentsTest {
 
     @Test
     public void whenMissed() {
-        List<String> input = List.of("k1/sk1", "k2/sk1");
+        List<String> input = Arrays.asList("k1/sk1", "k2/sk1");
         List<String> expect = List.of("k1", "k1/sk1", "k2", "k2/sk1");
         List<String> result = Departments.fillGaps(input);
         assertThat(result, is(expect));
@@ -20,7 +20,7 @@ public class DepartmentsTest {
 
     @Test
     public void whenMissedTwo() {
-        List<String> input = List.of("k1/sk1", "k2/sk1/ssk1");
+        List<String> input = Arrays.asList("k1/sk1", "k2/sk1/ssk1");
         List<String> expect = List.of("k1", "k1/sk1", "k2", "k2/sk1", "k2/sk1/ssk1");
         List<String> result = Departments.fillGaps(input);
         assertThat(result, is(expect));
@@ -28,7 +28,7 @@ public class DepartmentsTest {
 
     @Test
     public void whenNonChange() {
-        List<String> input = List.of("k1", "k1/sk1");
+        List<String> input = Arrays.asList("k1", "k1/sk1");
         List<String> expect = List.of("k1", "k1/sk1");
         List<String> result = Departments.fillGaps(input);
         assertThat(result, is(expect));
@@ -36,7 +36,7 @@ public class DepartmentsTest {
 
     @Test
     public void whenSortAscWithoutMissedDepartments() {
-        List<String> input = List.of(
+        List<String> input = Arrays.asList(
                 "K1/SK1",
                 "K1/SK1/SSK1",
                 "K1/SK1/SSK2",
@@ -64,7 +64,7 @@ public class DepartmentsTest {
 
     @Test
     public void whenSortAscWithMissedDepartments() {
-        List<String> input = List.of(
+        List<String> input = Arrays.asList(
                 "K1/SK1/SSK1",
                 "K1/SK1/SSK2",
                 "K2/SK1",
@@ -86,7 +86,7 @@ public class DepartmentsTest {
 
     @Test
     public void whenSortDescWithoutMissedDepartments() {
-        List<String> input = List.of(
+        List<String> input = Arrays.asList(
                 "K1/SK1",
                 "K1/SK1/SSK1",
                 "K1/SK1/SSK2",
@@ -114,7 +114,7 @@ public class DepartmentsTest {
 
     @Test
     public void whenSortDescWithMissedDepartments() {
-        List<String> input = List.of(
+        List<String> input = Arrays.asList(
                 "K1/SK1",
                 "K1/SK1/SSK1",
                 "K1/SK1/SSK2",
