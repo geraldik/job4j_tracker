@@ -1,12 +1,10 @@
 package ru.job4j.bank;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Класс реализует модель банковской системы.
+ *
  * @author VLAD KROTOV
  * @version 1.0
  */
@@ -19,6 +17,7 @@ public class BankService {
 
     /**
      * Метод регистрирует пользователя в системе.
+     *
      * @param user регистрируемый пользователь
      */
     public void addUser(User user) {
@@ -28,13 +27,14 @@ public class BankService {
     /**
      * Метод добавляет пользователю банковский счет.
      * У пользователя может быть несколько банковских счетов.
+     *
      * @param passport паспортные данные пользователя
-     * @param account данные добавляемого счета
+     * @param account  данные добавляемого счета
      */
     public void addAccount(String passport, Account account) {
-        User user = findByPassport(passport);
-        if (user != null) {
-            List<Account> accounts = users.get(user);
+        Optional<User> user = findByPassport(passport);
+        if (user.isPresent()) {
+            List<Account> accounts = users.get(user.get());
             if (!accounts.contains(account)) {
                 accounts.add(account);
             }
@@ -43,57 +43,59 @@ public class BankService {
 
     /**
      * Метод ищет пользователя по паспортным данным.
+     *
      * @param passport паспортные данные клиента
      * @return возвращает найденного пользователя или null, если пользователь не найден
      */
-    public User findByPassport(String passport) {
+    public Optional<User> findByPassport(String passport) {
         return users.keySet()
                 .stream()
                 .filter(u -> passport.equals(u.getPassport()))
-                .findFirst()
-                .orElse(null);
+                .findFirst();
     }
 
     /**
      * Метод осуществляет поиск счета пользователя по паспортным данным и реквизитам.
-     * @param passport паспортные данные пользователя
+     *
+     * @param passport  паспортные данные пользователя
      * @param requisite данные счета пользователя
      * @return возвращает счет пользователя если такой найдет. Если пользователь не найден или не найден
      * счет, то возвращается null.
      */
-    public Account findByRequisite(String passport, String requisite) {
-        User user = findByPassport(passport);
-        if (user != null) {
-            return users.get(user)
+    public Optional<Account> findByRequisite(String passport, String requisite) {
+        Optional<User> user = findByPassport(passport);
+        Optional<Account> rsl = Optional.empty();
+        if (user.isPresent()) {
+           rsl = users.get(user.get())
                     .stream()
                     .filter(ac -> requisite.equals(ac.getRequisite()))
-                    .findFirst()
-                    .orElse(null);
+                    .findFirst();
         }
-        return null;
+            return rsl;
     }
 
     /**
      * Метод переводит средств с одного счета на другой.
-     * @param srcPassport паспортные данные пользователя, со счета которого осуществляется перевод
-     * @param srcRequisite номер счета, с которого выполняется перевод
-     * @param destPassport паспортные данные пользователя, на счет которого осуществляется перевод
+     *
+     * @param srcPassport   паспортные данные пользователя, со счета которого осуществляется перевод
+     * @param srcRequisite  номер счета, с которого выполняется перевод
+     * @param destPassport  паспортные данные пользователя, на счет которого осуществляется перевод
      * @param destRequisite номер счета, на который выполняется перевод
-     * @param amount переводимая сумма
+     * @param amount        переводимая сумма
      * @return возвращает true, если перевод удался и false если перевод не был выполнен: не найдены
      * пользователи, не найдены счета пользователей либо недостаточно средств для перевода.
      */
     public boolean transferMoney(String srcPassport, String srcRequisite,
                                  String destPassport, String destRequisite, double amount) {
-        Account srcAccount = findByRequisite(srcPassport, srcRequisite);
-        Account destAccount = findByRequisite(destPassport, destRequisite);
-        if (srcAccount == null
-                || destAccount == null
-                || srcAccount.getBalance() < amount) {
-            return false;
+        Optional<Account> srcAccount = findByRequisite(srcPassport, srcRequisite);
+        Optional<Account> destAccount = findByRequisite(destPassport, destRequisite);
+        if (srcAccount.isPresent()
+                && destAccount.isPresent()
+                && srcAccount.get().getBalance() >= amount) {
+            srcAccount.get().setBalance(srcAccount.get().getBalance() - amount);
+            destAccount.get().setBalance(destAccount.get().getBalance() + amount);
+            return true;
         }
-        srcAccount.setBalance(srcAccount.getBalance() - amount);
-        destAccount.setBalance(destAccount.getBalance() + amount);
-        return true;
+        return false;
     }
 }
