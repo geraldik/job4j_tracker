@@ -1,9 +1,11 @@
-package ru.job4j.search;
+package ru.job4j.stream.search;
 
 import org.junit.Test;
+import ru.job4j.search.Person;
+import ru.job4j.search.PhoneDictionary;
+
 import static org.junit.Assert.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import java.util.ArrayList;
 import static org.hamcrest.core.Is.is;
 
 public class PhoneDictionaryTest {
