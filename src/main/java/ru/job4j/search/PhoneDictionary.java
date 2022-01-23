@@ -1,8 +1,6 @@
 package ru.job4j.search;
 
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 public class PhoneDictionary {
@@ -20,7 +18,7 @@ public class PhoneDictionary {
         Predicate<Person> compareAddress = (persons) -> (persons.getAddress().contains(key));
         Predicate<Person> combine = compareName.or(compareSurname).or(comparePhone).or(compareAddress);
         var result = new ArrayList<Person>();
-        for (Person person : persons) {
+        for (var person : persons) {
             if (combine.test(person)) {
                 result.add(person);
             }
