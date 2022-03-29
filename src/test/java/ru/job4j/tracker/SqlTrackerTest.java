@@ -16,7 +16,7 @@ import static org.hamcrest.Matchers.nullValue;
 
 public class SqlTrackerTest {
 
-    static Connection connection;
+     private static Connection connection;
 
     @BeforeClass
     public static void initConnection() {
