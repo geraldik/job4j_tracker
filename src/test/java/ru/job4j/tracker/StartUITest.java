@@ -1,9 +1,14 @@
 package ru.job4j.tracker;
 
 import org.junit.Test;
+
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.nullValue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +18,7 @@ public class StartUITest {
     public void whenCreateItem() {
         Output out = new StubOutput();
         Input in = new StubInput(
-                new String[] {"0", "Item name", "1"}
+                new String[]{"0", "Item name", "1"}
         );
         MemTracker tracker = new MemTracker();
         List<UserAction> actions = new ArrayList<>();
@@ -29,7 +34,7 @@ public class StartUITest {
         MemTracker tracker = new MemTracker();
         Item one = tracker.add(new Item("test1"));
         Input in = new StubInput(
-                new String[] {"0", "1"}
+                new String[]{"0", "1"}
         );
         List<UserAction> actions = new ArrayList<>();
         actions.add(new ShowAction(out));
@@ -55,7 +60,7 @@ public class StartUITest {
         Item one = tracker.add(new Item("test1"));
         String editName = "New Test Name";
         Input in = new StubInput(
-                new String[] {"0", String.valueOf(one.getId()), editName, "1"}
+                new String[]{"0", String.valueOf(one.getId()), editName, "1"}
         );
         List<UserAction> actions = new ArrayList<>();
         actions.add(new EditAction(out));
@@ -80,8 +85,25 @@ public class StartUITest {
         MemTracker tracker = new MemTracker();
         Item item = tracker.add(new Item("Deleted item"));
         Input in = new StubInput(
-                new String[] {"0", String.valueOf(item.getId()), "1"}
+                new String[]{"0", String.valueOf(item.getId()), "1"}
         );
+        List<UserAction> actions = new ArrayList<>();
+        actions.add(new DeleteAction(out));
+        actions.add(new ExitAction());
+        new StartUI(out).init(in, tracker, actions);
+        assertThat(tracker.findById(item.getId()), is(nullValue()));
+    }
+
+    @Test
+    public void whenDeleteItemUsingMock() {
+        Output out = new StubOutput();
+        MemTracker tracker = new MemTracker();
+        Item item = tracker.add(new Item("Deleted item"));
+        Input in = mock(Input.class);
+        when(in.askInt(any(String.class)))
+                .thenReturn(0)
+                .thenReturn(item.getId())
+                .thenReturn(1);
         List<UserAction> actions = new ArrayList<>();
         actions.add(new DeleteAction(out));
         actions.add(new ExitAction());
@@ -95,8 +117,35 @@ public class StartUITest {
         MemTracker tracker = new MemTracker();
         Item one = tracker.add(new Item("test1"));
         Input in = new StubInput(
-                new String[] {"0", String.valueOf(one.getId()), "1"}
+                new String[]{"0", String.valueOf(one.getId()), "1"}
         );
+        List<UserAction> actions = new ArrayList<>();
+        actions.add(new FindByIdAction(out));
+        actions.add(new ExitAction());
+        new StartUI(out).init(in, tracker, actions);
+        String ln = System.lineSeparator();
+        assertThat(out.toString(), is(
+                "Menu:" + ln
+                        + "0. Find item by id" + ln
+                        + "1. Exit Program" + ln
+                        + "=== Find item by id ===" + ln
+                        + one + ln
+                        + "Menu:" + ln
+                        + "0. Find item by id" + ln
+                        + "1. Exit Program" + ln
+        ));
+    }
+
+    @Test
+    public void whenFindByIdTestOutputUsingMockIsSuccessfully() {
+        Output out = new StubOutput();
+        MemTracker tracker = new MemTracker();
+        Item one = tracker.add(new Item("test1"));
+        Input in = mock(Input.class);
+        when(in.askInt(any(String.class)))
+                .thenReturn(0)
+                .thenReturn(one.getId())
+                .thenReturn(1);
         List<UserAction> actions = new ArrayList<>();
         actions.add(new FindByIdAction(out));
         actions.add(new ExitAction());
@@ -120,8 +169,35 @@ public class StartUITest {
         MemTracker tracker = new MemTracker();
         Item one = tracker.add(new Item("test1"));
         Input in = new StubInput(
-                new String[] {"0", one.getName(), "1"}
+                new String[]{"0", one.getName(), "1"}
         );
+        List<UserAction> actions = new ArrayList<>();
+        actions.add(new FindByNameAction(out));
+        actions.add(new ExitAction());
+        new StartUI(out).init(in, tracker, actions);
+        String ln = System.lineSeparator();
+        assertThat(out.toString(), is(
+                "Menu:" + ln
+                        + "0. Find item by name" + ln
+                        + "1. Exit Program" + ln
+                        + "=== Find items by name ===" + ln
+                        + one + ln
+                        + "Menu:" + ln
+                        + "0. Find item by name" + ln
+                        + "1. Exit Program" + ln
+        ));
+    }
+
+    @Test
+    public void whenFindByNameTestOutputUsingMockIsSuccessfully() {
+        Output out = new StubOutput();
+        MemTracker tracker = new MemTracker();
+        Item one = tracker.add(new Item("test1"));
+        Input in = mock(Input.class);
+        when(in.askInt(any(String.class)))
+                .thenReturn(0)
+                .thenReturn(1);
+        when(in.askStr(any(String.class))).thenReturn(one.getName());
         List<UserAction> actions = new ArrayList<>();
         actions.add(new FindByNameAction(out));
         actions.add(new ExitAction());
@@ -143,7 +219,7 @@ public class StartUITest {
     public void whenExit() {
         Output out = new StubOutput();
         Input in = new StubInput(
-                new String[] {"0"}
+                new String[]{"0"}
         );
         MemTracker tracker = new MemTracker();
         List<UserAction> actions = new ArrayList<>();
@@ -159,7 +235,7 @@ public class StartUITest {
     public void whenInvalidExit() {
         Output out = new StubOutput();
         Input in = new StubInput(
-                new String[] {"1", "0"}
+                new String[]{"1", "0"}
         );
         MemTracker tracker = new MemTracker();
         List<UserAction> actions = new ArrayList<>();
