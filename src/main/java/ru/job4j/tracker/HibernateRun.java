@@ -15,15 +15,9 @@ public class HibernateRun {
         try {
             SessionFactory sf = new MetadataSources(registry).buildMetadata().buildSessionFactory();
             var item = new Item();
-            item.setName("Learn Hibernate");
+            item.setName("Генерация схемы через Hibernate");
+            item.setDescription("Данная колонка сгенерирована Hibernate");
             create(item, sf);
-            System.out.println(item);
-            item.setName("Learn Hibernate 5.");
-            update(item, sf);
-            System.out.println(item);
-            Item rsl = findById(item.getId(), sf);
-            System.out.println(rsl);
-            delete(rsl.getId(), sf);
             List<Item> list = findAll(sf);
             for (Item it : list) {
                 System.out.println(it);
