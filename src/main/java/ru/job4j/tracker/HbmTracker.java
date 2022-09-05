@@ -34,7 +34,7 @@ public class HbmTracker implements Store, AutoCloseable {
                 .setParameter("newName", item.getName())
                 .setParameter("newDescription", item.getDescription())
                 .setParameter("newCreated", item.getCreated())
-                .setParameter("fId", item.getId());
+                .setParameter("fId", id);
         boolean result = query.executeUpdate() > 0;
         session.getTransaction().commit();
         session.close();
