@@ -1,5 +1,6 @@
 package ru.job4j.tracker;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -7,6 +8,16 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.*;
 
 class HbmTrackerTest {
+
+    @AfterEach
+    public void clearData(){
+        try (HbmTracker hbmTracker = new HbmTracker()) {
+            hbmTracker.deleteAll();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 
     @Test
     public void whenSaveItemAndFindByGeneratedIdThenMustBeTheSame() {
